@@ -67,7 +67,11 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     
     >**Note**: The command will take 2 to 3 minutes to complete. The command will create a virtual machine and various resources associated with it such as storage, networking and security resources. Do not continue to the next step until the virtual machine deployment is complete. 
 
-5. In the Azure portal, search for **Virtual machines** and verify that your VM is running. Copy the Public IP address
+5. In the Azure portal, search for **Virtual machines** and verify that your VM is running. Copy the Public IP address. Alternatively, you can use this command:
+
+```cli
+az vm show --resource-group $resourcegroup --name $vmname -d --query [publicIps] --output tsv
+```
    
 6. SSH connect
     ```cli
