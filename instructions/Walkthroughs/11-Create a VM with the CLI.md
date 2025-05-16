@@ -56,8 +56,8 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     --image Ubuntu2204 \
     --public-ip-sku Standard \
     --admin-username $username \
-	--authentication-type all \
-	--generate-ssh-keys
+    --authentication-type all \
+    --generate-ssh-keys
     ```
 
     >**Note**: If you are using the command line on a Windows computer, replace the backslash (`\`) character with the caret (`^`) character.
@@ -67,19 +67,58 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     
     >**Note**: The command will take 2 to 3 minutes to complete. The command will create a virtual machine and various resources associated with it such as storage, networking and security resources. Do not continue to the next step until the virtual machine deployment is complete. 
 
-5. In the Azure portal, search for **Virtual machines** and verify that your VM is running. Copy the Public IP address. Alternatively, you can use this command:
 
-```cli
-az vm show --resource-group $resourcegroup --name $vmname -d --query [publicIps] --output tsv
-```
-   
-6. SSH connect
+5. Execute the command az vm extension set to confiture Nginx in your VM:
+    ```cli
+	az vm extension set \
+	--resource-group $resourcegroup \
+	--vm-name $vmname \
+	--name customScript \
+	--publisher Microsoft.Azure.Extensions \
+	--version 2.1 \
+	--settings "{\"fileUris\":[\"https://raw.githubusercontent.com/MicrosoftDocs/mslearn-welcome-to-azure/master/configure-nginx.sh\"]}" \
+	--protected-settings "{\"commandToExecute\": \"./configure-nginx.sh\"}"
+    ```
+
+    >**Note**:he content of the file is as follows:
+    
+	```cli
+	#!/bin/bash
+	
+	# Update apt cache.
+	sudo apt-get update
+	
+	# Install Nginx.
+	sudo apt-get install -y nginx
+	
+	# Set the home page.
+	echo "<html><body><h2>Welcome to Azure! My name is $(hostname).</h2></body></html>" | sudo tee -a /var/www/html/index.html
+	```
+
+6. Open port 80 in the network settings
+   ```cli
+   	az vm open-port --resource-group $resourcegroup --name $vmname --port 80
+   ```
+
+# Task 3: Test your application
+
+1. In the Azure portal, search for **Virtual machines** and verify that your VM is running. Copy the Public IP address. Alternatively, you can use this command:
+
+    ```cli
+	az vm show --resource-group $resourcegroup --name $vmname -d --query [publicIps] --output tsv
+    ```
+
+2. Open a browser
+
+# Task 4: Check that you can connect to the VM using SSH
+ 
+1. SSH connect
     ```cli
     ssh azureuser@**your_ip**
     ```
-    Now you are in the bash of your virtual machine. If you want to exit, write exit.
+2. Now you are in the bash of your virtual machine. If you want to exit, write exit.
 
-# Task 3: Execute commmands in the Cloud Shell
+# Task 5: Execute commmands in the Cloud Shell
 
 In this task, we will practice executing CLI commands from the Cloud Shell. 
 
@@ -105,7 +144,7 @@ In this task, we will practice executing CLI commands from the Cloud Shell.
     az vm show --resource-group $resourcegroup --name $vmname --show-details --output table 
     ```
 
-# Task 4: Review Azure Advisor Recommendations
+# Task 6: Review Azure Advisor Recommendations
 
 In this task, we will review Azure Advisor recommendations.
 
