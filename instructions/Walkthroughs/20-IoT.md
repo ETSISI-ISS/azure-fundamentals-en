@@ -95,7 +95,7 @@ az webapp update --name $mywebapp --resource-group $myresourcegroup --https-only
 ```
 
 
-## Demo 3 - VISUALIZING DATA IN POWERBI
+## Demo 4 - VISUALIZING DATA IN POWERBI
 
 ```cli
 az login --scope https://management.core.windows.net//.default
