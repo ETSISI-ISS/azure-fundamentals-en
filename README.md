@@ -12,3 +12,5 @@ These labs can be useful to obtain [AZ-900T00 and AZ-900T01: Microsoft Azure Fun
 
 6.- [Use the Azure Pricing Calculator](instructions/Walkthroughs/19-Use%20the%20Azure%20Pricing%20Calculator.md)
 
+7.- [IoT Demos](instructions/Walkthroughs/20-IoT.md)
+
