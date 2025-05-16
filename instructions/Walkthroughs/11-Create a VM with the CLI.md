@@ -54,6 +54,7 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     --resource-group $resourcegroup \
     --name $vmname \
     --image Ubuntu2204 \
+    --size Standard_DS1_v2 \
     --public-ip-sku Standard \
     --admin-username $username \
     --authentication-type all \
@@ -63,7 +64,29 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     >**Note**: If you are using the command line on a Windows computer, replace the backslash (`\`) character with the caret (`^`) character.
     
     >**Note**: Your are requested for an admin password. Password requirements when creating a VM: between 12 – 123 characters; have lower characters; have upper characters; have a digit; have a special character.
-
+    
+    >**Note**: When the --size parameter is not specified when creating a virtual machine in Azure using Azure CLI, the default virtual machine size taken is Standard_DS1_v2. This size includes 1 vCPU and 3.5 GiB of memory, which is adequate for many development and test applications. If you get an error that says "Standard_DS1_v2 is currently not available in location westeurope", first registry the resource provider
+    ```cli
+	az provider register --namespace Microsoft.Compute
+    ```
+    >**Note**:If this does not work either, check if this size if available in your location
+    ```cli
+	az vm list-sizes --location $location --output table | grep Standard_DS1_v2
+    ```
+    >**Note**:If it is not available, try other size (e.g. Standard_B1s):
+    ```cli
+    vmname="myVM"
+    username="azureuser"
+    az vm create \
+    --resource-group $resourcegroup \
+    --name $vmname \
+    --image Ubuntu2204 \
+    --size Standard_B1s \
+    --public-ip-sku Standard \
+    --admin-username $username \
+    --authentication-type all \
+    --generate-ssh-keys    
+    ```
     
     >**Note**: The command will take 2 to 3 minutes to complete. The command will create a virtual machine and various resources associated with it such as storage, networking and security resources. Do not continue to the next step until the virtual machine deployment is complete. 
 
@@ -97,7 +120,7 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
 
 6. Open port 80 in the network settings
    ```cli
-   	az vm open-port --resource-group $resourcegroup --name $vmname --port 80
+   az vm open-port --resource-group $resourcegroup --name $vmname --port 80
    ```
 
 # Task 3: Test your application
