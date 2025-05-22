@@ -73,13 +73,14 @@ az iot hub message-route create --route-name mytelemetryroute  --hub-name $myiot
 
 ```cli
 mywebapp="mywebappdemoforvisualizingdata"
+myconsumergroup="webconsumer"
+
 #create service plan
 az appservice plan create --name myserviceplan --resource-group $myresourcegroup --sku FREE
 #create web application
-az webapp create -n $mywebapp -g $myresourcegroup -p myserviceplan --runtime "node|16-LTS" 
+az webapp create -n $mywebapp -g $myresourcegroup -p myserviceplan --runtime "NODE:20LTS" 
 
 #add consumer group to your IoT Hub
-myconsumergroup="webconsumer"
 az iot hub consumer-group create --hub-name $myiothub --name $myconsumergroup
 
 #set IoT Hub Connection String
