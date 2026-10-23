@@ -54,7 +54,7 @@ In this task, we will use Azure CLI to create a resource group and a virtual mac
     --resource-group $resourcegroup \
     --name $vmname \
     --image Ubuntu2204 \
-    --size Standard_DS1_v2 \
+    --size Standard_B2s \
     --public-ip-sku Standard \
     --admin-username $username \
     --authentication-type all \
